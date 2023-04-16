@@ -26,4 +26,8 @@ public class BoardFile {
 
     private LocalDateTime boardTime;
 
+    public void setBoard(Board board){
+        this.board=board;
+        board.getBoardFileList().add(this);
+    }
 }

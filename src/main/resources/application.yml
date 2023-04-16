@@ -1,6 +1,8 @@
 server:
-  port: 3000
-
+  servlet:
+    session:
+      tracking-modes:
+        - cookie
 
 spring:
   datasource:
@@ -10,6 +12,10 @@ spring:
     password: 12341234
   thymeleaf:
     cache: false
+  servlet:
+    multipart:
+      enabled: true
+      location: C:/temp/
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect

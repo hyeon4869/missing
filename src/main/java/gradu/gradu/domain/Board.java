@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 public class Board {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="board_id")
     private Long id;
 
@@ -29,9 +29,14 @@ public class Board {
     private int fileAttached;//1이면 첨부, 0이면 없음
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE,orphanRemoval = true)
-    private List<BoardFile> boardFiles = new ArrayList<>();
+    private List<BoardFile> boardFileList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
     private Member member;
+
+    public void setMember(Member member) {
+      this.member=member;
+      member.getBoards().add(this);
+    }
 }

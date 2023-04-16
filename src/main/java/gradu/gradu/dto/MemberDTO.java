@@ -12,6 +12,7 @@ import javax.validation.constraints.NotEmpty;
 public class MemberDTO {
 
     private Long id;
+
     private String userID;
     private String userPassID;
     private String userName;

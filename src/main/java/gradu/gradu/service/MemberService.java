@@ -1,12 +1,16 @@
 package gradu.gradu.service;
 
+//import gradu.gradu.config.SecurityConfig;
 import gradu.gradu.domain.Member;
 import gradu.gradu.dto.MemberDTO;
 import gradu.gradu.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.apache.bcel.classfile.Utility;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Security;
 import java.util.Optional;
 
 @Service
@@ -15,21 +19,25 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    //private final SecurityConfig securityConfig;
 
     @Transactional
-    public void save(MemberDTO memberDTO) {
+    public Member save(MemberDTO memberDTO) {
 
         validateDuplicateMember(memberDTO);
+        //BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         Member member = Member.builder()
                 .userID(memberDTO.getUserID())
                 .userPassID(memberDTO.getUserPassID())
+                //.userPassID(passwordEncoder.encode(memberDTO.getUserPassID()))
                 .userName(memberDTO.getUserName())
                 .userGender(memberDTO.getUserGender())
                 .userEmail(memberDTO.getUserEmail())
                 .userCode(memberDTO.getUserCode())
                 .build();
         memberRepository.save(member);
+        return member;
     }
 
     private void validateDuplicateMember(MemberDTO memberDTO) {
