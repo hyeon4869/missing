@@ -18,14 +18,13 @@ public class Board {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="board_id")
     private Long id;
-
+    private String searchKey;
     private String missingName;
     private String missingAge;
     private String missingGender;
     private String missingPlace;
     private String missingDate;
     private LocalDateTime boardTime;
-
     private int fileAttached;//1이면 첨부, 0이면 없음
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE,orphanRemoval = true)

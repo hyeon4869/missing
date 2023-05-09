@@ -26,6 +26,10 @@ public class MemberController {
         return "main";
     }
 
+    @GetMapping("/main")
+    public String mainForm() {
+        return "main";
+    }
 
     @GetMapping("/join")
     public String joinForm(){
@@ -60,7 +64,7 @@ public class MemberController {
         if(loginResult!=null) {
             session.setAttribute("userID", loginResult.getUserID());
             model.addAttribute("message","로그인 성공");
-            model.addAttribute("searchUrl","/");
+            model.addAttribute("searchUrl","/write");
             return "message";
         } else {
             model.addAttribute("message","아이디 혹은 비밀번호가 틀립니다");

@@ -1,11 +1,13 @@
 package gradu.gradu.controller;
 
+import gradu.gradu.domain.Board;
 import gradu.gradu.dto.BoardDTO;
 import gradu.gradu.dto.BoardFileDTO;
 import gradu.gradu.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,9 +39,28 @@ public class BoardController {
 
 
     @GetMapping("/bbs")
-    public String listForm(Model model,Pageable pageable) {
-        model.addAttribute("boardList", boardService.findAll(pageable));
+    public String listForm(Model model, @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, String searchKey) {
+        Page<Board> list = null;
+        if(searchKey==null) {
+            list = boardService.findAll(pageable);
+        } else {
+            list = boardService.findBySearchKey(searchKey, pageable);
+        }
+        int nowPage= pageable.getPageNumber()+1;
+        int startPage=Math.max(nowPage -4,1);
+        int endPage=Math.min(nowPage +5, list.getTotalPages());
+
+        model.addAttribute("boardList", list);
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
         return "bbs";
+    }
+
+    @GetMapping("/bbs2")
+    public String bbs2Form(){
+        return "bbs2";
     }
 
 }
