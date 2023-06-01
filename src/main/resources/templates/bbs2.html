@@ -1,12 +1,17 @@
 <!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:float="http://www.w3.org/1999/xhtml">
 <head>
+  <link rel="preload" href="image.jpg" as="image">
+
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewprt" content="width=device-width", initial-scale="1">
-  <title>Let's go Home</title>
+  <meta name="viewport" content="width=device-width", initial-scale="1">
+
   <link rel="stylesheet" href="css/css.css">
   <link rel="stylesheet" href="css/bootstrap.css">
   <link rel="stylesheet" href="css/custom.css">
+  <title>Let's go Home</title>
+
 </head>
 <body>
 <nav class="navbar navbar-default">
@@ -17,23 +22,36 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="main.html">실종자 찾기 사이트</a>
+    <a class="navbar-brand" href="write">실종자 찾기 사이트</a>
   </div>
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav">
-      <li><a href="write.html">실종자 등록</a></li>
-      <li class="active"><a href="bbs.html">실종자 등록 현황 페이지</a></li></ul>
-
+      <li><a href="main">메인</a></li>
+      <li class="active"><a href="bbs">실종자 등록 현황 페이지</a></li></ul>
+    <div th:if="${session.userID == null}"></div>
+    <ul class="nav navbar-nav navbar-right">
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"
+           data-toggle="dropdown" role="button" aria-haspopup="true"
+           aria-expanded="false">메뉴<span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="join">회원가입</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div th:if="${session.userID!=null}">
+    </div>
     <ul class="nav navbar-nav navbar-right">
       <li class="dropdown">
         <a href="#" class="dropdown-toggle"
            data-toggle="dropdown" role="button" aria-haspopup="true"
            aria-expanded="false">회원관리<span class="caret"></span></a>
         <ul class="dropdown-menu">
-          <li><a href="logoutAction.html">로그아웃</a></li>
+          <li><a href="logoutAction">로그아웃</a></li>
         </ul>
       </li>
     </ul>
+
   </div>
 </nav>
 <div class="container">
@@ -41,24 +59,30 @@
   <h4>실종자 사진, 정보, 위치를 안내해드립니다.</h4>
 </div>
 <hr class='hr-solid'/>
-<h3><div class="사진" style="float: left">실종 전&nbsp&nbsp&nbsp&nbsp</div></h3>
-<!-- 실종 전 사진코드 -->
-<!-- 실종 후 사진코드 -->
-<h3><div class="발견사진" style="float: right">실종 후</div></h3><br>
+
+<center><h3><div class="사진" float:left;>실종 전 | 실종 후</div></h3></center>
+
+<center><img th:src="@{|${imageSrc}|}" width="250" height="300" />
+ <img src="image/photo1.jpg" style="height:300px; width:250px;"></center>
+
+<div th:each="board : ${board}">
 
 <hr class='hr-solid'/>
 <div class="container">
-  <h3><div class="name" >이름:</div></h3>
-  <h3><div class="age">나이:</div></h3>
-  <h3><div class="date">실종날짜:</div></h3>
-  <h3><div class="location">실종장소:</div></h3>
-  <h3> <div class="contact">보호자 연락처:</div></h3>
+  <h3><div class="name" >이름: <a th:text="${board.missingName}"></a></div></h3>
+  <h3><div class="age">나이: <a th:text="${board.missingAge}"></a></div></h3>
+  <h3><div class="date">실종날짜: <a th:text="${board.missingDate}"></a></div></h3>
+  <h3><div class="location">실종장소: <a th:text="${board.missingPlace}"></a></div></h3>
+  <h3> <div class="contact">보호자 연락처: <a th:text="${board.missingNum}"</div></h3>
 </div>
-<hr class='hr-solid'/>
-<div class="id">위치</div>
-<iframe src="지도소스" allowfullscreen=""flase loading="lazy">
-  <!-- 지도 크기 조정 예정 -->
-</iframe>
+</div>
+
+
+<!--<hr class='hr-solid'/>-->
+<!--<div class="id">위치</div>-->
+<!--<iframe src="https://www.google.com/maps/place/%EA%B2%BD%EB%82%A8%EB%8C%80%ED%95%99%EA%B5%90+%EC%A0%9C1%EA%B3%B5%ED%95%99%EA%B4%80/data=!4m6!3m5!1s0x356f2f3714d5b0af:0x5eba20f41b4678a4!8m2!3d35.1795078!4d128.5555226!16s%2Fg%2F11nh4cyqmh?entry=ttu" allowfullscreen=""flase loading="lazy">-->
+<!--  &lt;!&ndash; 지도 크기 조정 예정 &ndash;&gt;-->
+<!--</iframe>-->
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="js/bootstrap.js"></script>
 </body>

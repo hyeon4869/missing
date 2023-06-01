@@ -30,4 +30,6 @@ public class BoardFile {
         this.board=board;
         board.getBoardFileList().add(this);
     }
+
+
 }

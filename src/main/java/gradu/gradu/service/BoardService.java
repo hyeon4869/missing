@@ -7,11 +7,13 @@ import gradu.gradu.dto.BoardFileDTO;
 import gradu.gradu.repository.BoardFileRepository;
 import gradu.gradu.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -20,11 +22,14 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +51,7 @@ public class BoardService {
                 .missingGender(boardDTO.getMissingGender())
                 .missingPlace(boardDTO.getMissingPlace())
                 .missingDate(boardDTO.getMissingDate())
+                .missingNum(boardDTO.getMissingNum())
                 .boardTime(LocalDateTime.now())
                 .fileAttached(boardFileDTO.getBoardFile() == null || boardFileDTO.getBoardFile().isEmpty() ? 0 : 1)
                 .build();
@@ -57,6 +63,8 @@ public class BoardService {
             MultipartFile boardFile = boardFileDTO.getBoardFile();
             String originalFilename = boardFile.getOriginalFilename();
             String storedFileName = System.currentTimeMillis() + "_" + originalFilename;
+
+
             savePath = "C:/temp/"+storedFileName;
 
             // C:/temp/ 디렉토리가 존재하지 않는다면 생성
@@ -76,57 +84,138 @@ public class BoardService {
 
             boardFileRepository.save(toboardFile);
 
-            // Path sourcePath = Paths.get(savePath);
-            // Path destinationPath = Paths.get("src/main/resources/static/board/" + storedFileName);
-            // try {
-            //    Files.move(sourcePath, destinationPath);
-            //} catch (IOException e) {
-            //   e.printStackTrace();
-            //}
-        }
+            // src/main/resources/static/images/ 디렉토리에 이미지 파일 복사
+            String destinationPath = "D:/boot/gradu/photo.jpg" ;
 
-
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-
-        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        if (savePath != null) {
-            body.add("boardFile", new FileSystemResource(new File(savePath)));
-        }
-        body.add("missingName", boardDTO.getMissingName());
-        body.add("missingAge", boardDTO.getMissingAge());
-        body.add("missingGender", boardDTO.getMissingGender());
-        body.add("missingPlace", boardDTO.getMissingPlace());
-        body.add("missingDate", boardDTO.getMissingDate());
-        body.add("boardTime", board.getBoardTime());
-        body.add("fileAttached", board.getFileAttached());
-
-        HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(body, headers);
-        String url = "http://localhost:3000/api/boards";
-
-        try {
-            ResponseEntity<Void> response = restTemplate.postForEntity(url, request, Void.class);
-            if (response.getStatusCode() == HttpStatus.OK) {
-                // 성공적으로 처리된 경우
-                System.out.println("성공!");
-            } else {
-                // 오류가 발생한 경우
-                System.out.println("실패!");
+            Path sourcePath = Paths.get(savePath);
+            Path destPath = Paths.get(destinationPath);
+            try {
+                Files.copy(sourcePath, destPath, StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (HttpClientErrorException e) {
-            // HTTP 요청 실패 시 예외 처리
-            System.out.println("HTTP 요청 실패: " + e.getMessage());
         }
+
+        //////////////////////////////////////
+                String photo = "D:\\boot\\gradu\\photo.jpg";
+                List<String> listData = List.of(boardDTO.getMissingName(), boardDTO.getMissingGender(), boardDTO.getMissingAge(), boardDTO.getMissingPlace(), boardDTO.getMissingDate(), boardDTO.getMissingNum());
+
+                try {
+                    // 사진 복사
+                    Files.copy(Path.of(photo), Path.of("D:\\boot\\gradu\\data\\photo.jpg"), StandardCopyOption.REPLACE_EXISTING);
+
+                    // 리스트 저장
+                    FileWriter writer = new FileWriter("D:\\boot\\gradu\\data\\list_data.txt");
+                    for (String item : listData) {
+                        writer.write(item.toString() + "\n");
+                    }
+                    writer.close();
+
+                    // 파일 시간 스탬프 업데이트
+                    Thread.sleep(1000); // 소스 코드 파일 실행 시간 고려
+                    FileWriter timestampWriter = new FileWriter("data/timestamp.txt");
+                    timestampWriter.write(String.valueOf(Instant.now().getEpochSecond()));
+                    timestampWriter.close();
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+/////////////////////////////////////////
+
+
+
+//        RestTemplate restTemplate = new RestTemplate();
+//
+//// StringHttpMessageConverter의 기본 인코딩을 UTF-8로 설정
+//        StringHttpMessageConverter stringConverter = new StringHttpMessageConverter(StandardCharsets.UTF_8);
+//        restTemplate.getMessageConverters().removeIf(c -> c instanceof StringHttpMessageConverter);
+//        restTemplate.getMessageConverters().add(0, stringConverter);
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+//
+//        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+//
+//        if (savePath != null) {
+//            // 파일을 FileSystemResource로 변환하여 추가
+//            File boardFile = new File(savePath);
+//            long imageSize = boardFile.length();
+//            body.add("boardFile", new FileSystemResource(boardFile));
+//            body.add("imageSize", imageSize);
+//        }
+//
+//// 나머지 파라미터 추가
+//        body.add("keyword", "실종자 등록\n");
+//        body.add("missingName", boardDTO.getMissingName());
+//        body.add("missingGender", boardDTO.getMissingGender());
+//        body.add("missingAge", boardDTO.getMissingAge());
+//        body.add("missingPlace", boardDTO.getMissingPlace());
+//        body.add("missingDate", boardDTO.getMissingDate());
+//        body.add("missingNum", boardDTO.getMissingNum());
+//
+//        HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(body, headers);
+//        String url = "http://192.168.26.129:12345/";
+//
+//        ResponseEntity<byte[]> response = restTemplate.postForEntity(url, request, byte[].class);
+//
+//        if (response.getStatusCode() == HttpStatus.OK) {
+//            // 성공적으로 처리된 경우
+//            byte[] imageBytes = response.getBody();
+//
+//            // 이미지 파일을 저장할 디렉토리 경로
+//            String saveDirectory = "C:/temp/";
+//
+//            // 저장할 파일 경로 및 이름
+//            String saveFilePath = saveDirectory + "image.jpg";
+//
+//            // 이미지 파일 저장
+//            try (FileOutputStream fos = new FileOutputStream(saveFilePath)) {
+//                fos.write(imageBytes);
+//                fos.flush();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//       }
+
+
     }
 
     public Page<Board> findAll(Pageable pageable) {
         return boardRepository.findAll(pageable);
     }
 
-    public Page<Board> findBySearchKey(String searchKey, Pageable pageable){
-        return boardRepository.findBySearchKeyContaining(searchKey, pageable);
+    public Page<Board> findBySearchGender(String searchGender, Pageable pageable){
+        return boardRepository.findByMissingGenderContaining(searchGender, pageable);
+    }
+
+    public Page<Board> findBySearchArea(String h_area1, Pageable pageable){
+        return boardRepository.findByMissingPlaceContaining(h_area1, pageable);
     }
 
 
+
+    public Page<Board> findBySearchGenderAndArea(String searchGender, String h_area1, Pageable pageable) {
+        return boardRepository.findByMissingGenderContainingAndMissingPlaceContaining(searchGender,h_area1, pageable);
+    }
+
+    public Board findById(Long id) {
+        return boardRepository.findById(id).get();
+    }
+
+
+    public Page<Board> findBySearchKey(String searchKey, Pageable pageable) {
+        return boardRepository.findByMissingNameContaining(searchKey, pageable);
+    }
+
+    public Page<Board> findBySearchKeyAndSearchGender(String searchKey, String searchGender, Pageable pageable) {
+        return boardRepository.findByMissingNameContainingAndMissingGenderContaining(searchKey,searchGender,pageable);
+    }
+
+    public Page<Board> findBySearchKeyAndSearchGenderAndArea(String searchKey, String searchGender, String h_area1, Pageable pageable) {
+        return boardRepository.findByMissingNameContainingAndMissingGenderContainingAndMissingPlaceContaining(searchKey,searchGender,h_area1,pageable);
+    }
+
+    public Page<Board> findBySearchKeyAndSearchArea(String searchKey, String h_area1, Pageable pageable) {
+        return boardRepository.findByMissingNameContainingAndMissingPlaceContaining(searchKey, h_area1, pageable);
+    }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html >
+<html>
 <head>
   <link rel="stylesheet" href="css/bootstrap.css">
   <link rel="stylesheet" href="css/custom.css">
@@ -16,12 +16,12 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="write">실종자 찾기 사이트</a>
+    <a class="navbar-brand" href="main">실종자 찾기 사이트</a>
   </div>
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav">
-      <li><a href="main">메인</a></li>
-      <li class="active"><a href="bbs">실종자 등록 현황 페이지</a></li></ul>
+      <li><a href="write">실종자 등록</a></li>
+      <li class="active"><a href="bbs">실종자 등록 현황</a></li></ul>
     <div th:if="${session.userID == null}"></div>
     <ul class="nav navbar-nav navbar-right">
       <li class="dropdown">
@@ -52,20 +52,22 @@
 <div class="box1">
   <dt><h4>관리연도</h4></dt>
   <input type="date"
+         name="searchDate"
          id="date"
          max="2030-12-31"
          min="2020-01-01"
          value="2023-03-01"></label>
   <br><p></p>
   <dt><h4>발생지역</h4></dt>
-  <select name="h_area1" onChange="cat1_change(this.value,h_area2)" >
-    <option>select</option>
-    <option value='1'>서울</option>
-    <option value='2'>부산</option>
-    <option value='3'>대구</option>
-    <option value='4'>인천</option>
-    <option value='5'>광주</option>
-    <option value='6'>대전</option>
+  <form method="get" th:action="@{/bbs}">
+    <select name="h_area1" onChange="cat1_change(this.value,h_area2)" >
+      <option>select</option>
+      <option value='1'>서울</option>
+      <option value='2'>부산</option>
+      <option value='3'>대구</option>
+      <option value='4'>인천</option>
+      <option value='5'>광주</option>
+      <option value='6'>대전</option>
     <option value='7'>울산</option>
     <option value='8'>강원</option>
     <option value='9'>경기</option>
@@ -77,17 +79,21 @@
     <option value='15'>충남</option>
     <option value='16'>충북</option>
   </select>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <button class="search-btn" type="submit">
-    <i class="fas fa-search"></i>
-  </button>
-  <br><p></p>
-  <dt><h4>성별</h4></dt>
-  <select name="h_area1" onChange="cat1_change(this.value,h_area2)" >
-    <option>select</option>
-    <option value="1">남자</option>
-    <option value="2">여자</option>
-  </select>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <button class="search-btn" type="submit">
+      <i class="fas fa-search"></i>
+    </button>
+    <br><p></p>
+    <dt><h4>성별</h4></dt>
+    <select name="searchGender" onChange="cat1_change(this.value,h_area2)" >
+      <option value="select">select</option>
+      <option value="1">남자</option>
+      <option value="2">여자</option>
+    </select>
+    <dt><h4>이름</h4></dt>
+    <dd><input type="text" name="searchKey" placeholder="이름를 입력하세요"></dd>
+  </form>
+</div>
 </div>
 <div class="container">
   <div class="row">
@@ -106,16 +112,19 @@
       <tr th:each="board: ${boardList}">
         <th><input type="checkbox"></th>
         <th th:text="${board.id}"></th>
-        <th th:text="${board.missingName+'('+board.missingGender+')'}"></th>
+        <th><a th:href="@{/view(id=${board.id})}" th:text="${board.missingName+'('+board.missingGender+')'}"></a></th>
         <th th:text="${board.missingAge}"></th>
         <th th:text="${board.missingDate}"></th>
         <th th:text="${board.missingPlace}"></th>
       </tr>
       </tbody>
     </table>
+    <div style=" text-align: left;">
+      <button style=" display: inline-block;">삭제</button>
+    </div>
     <div class="text-center">
       <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
-        <a th:if="${page != nowPage}" th:href="@{/bbs(page=${page})}" th:text="${page}"></a>
+        <a th:if="${page != nowPage}" th:href="@{/bbs(page=${page - 1}, searchKey=${param.searchKey}, searchGender=${param.searchGender}, h_area1=${param.h_area1})}" th:text="${page}"></a>
         <strong th:if="${page == nowPage}" th:text="${page}" style="color : red"></strong>
       </th:block>
     </div>
@@ -125,4 +134,5 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="js/bootstrap.js"></script>
 </body>
+
 </html>

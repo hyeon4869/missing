@@ -9,6 +9,7 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class MemberDTO {
 
     private Long id;

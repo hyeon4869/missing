@@ -53,8 +53,12 @@
           </dl>
           <dl>
             <dt>성별</dt>
-            <dd><input type="radio" name="missingGender" value="man" checked/>남
-              <input type="radio" name="missingGender" value="woman">여</dd>
+            <dd><input type="radio" name="missingGender" value="남자" checked/>남
+              <input type="radio" name="missingGender" value="여자">여</dd>
+          </dl>
+          <dl>
+            <dt>보호자 연락처</dt>
+            <dd><input type="#" name="missingNum" placeholder="연락처를 입력하세요"></dd>
           </dl>
           <dt>발생장소</dt>
           <dd><input type="text" name="missingPlace"placeholder="발생장소 입력하세여"></dd>
@@ -69,19 +73,45 @@
         <div class="image-upload" id="image-upload">
           <dl><dt>실종자 이미지</dt></dl>
 
-            <input type="file" id="chooseFile" name="boardFile" accept="image/*" onchange="loadFile(this)">
         </div>
+          <div class="image-container">
+            <input style="display: block;" type="file" id="input-image" name="boardFile" accept="image/*" onchange="loadFile(this)">
+            <img style="width: 500px;" id="preview-image" src="https://dummyimage.com/500x500/ffffff/000000.png&text=preview+image">
+          </div>
+          <script>
+            function readImage(input) {
+              if(input.files && input.files[0]) {
+                const reader = new FileReader()
+                reader.onload = e => {
+                  const previewImage = document.getElementById("preview-image")
+                  previewImage.src = e.target.result
+                }
+                reader.readAsDataURL(input.files[0])
+              }
+            }
+            const inputImage = document.getElementById("input-image")
+            inputImage.addEventListener("change", e => {
+              readImage(e.target)
+            })
+          </script>
         <div class="bt_wrap">
-          <a href="bbs" class="on">등록</a>
+          <button type="submit" id="registerBtn" onclick="redirectToWritePage()"><a class="on">등록</a></button>
           <a href="/">취소</a>
         </div>
-          <input type="submit">
         </form>
 
       </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="js/bootstrap.js"></script>
+    <script>
+      function redirectToWritePage() {
+        setTimeout(function() {
+          window.location.href = '/write';
+        }, 3000); // 3초(3000밀리초) 후에 페이지 이동
+      }
+    </script>
+
 
 </body>
 </html>

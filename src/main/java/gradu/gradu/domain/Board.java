@@ -18,9 +18,9 @@ public class Board {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="board_id")
     private Long id;
-    private String searchKey;
     private String missingName;
     private String missingAge;
+    private String missingNum;
     private String missingGender;
     private String missingPlace;
     private String missingDate;
