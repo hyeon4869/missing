@@ -86,4 +86,18 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="js/bootstrap.js"></script>
 </body>
+
+<script>
+  var currentURL = window.location.href;
+  var url = new URL(currentURL);
+  var id = url.searchParams.get("id");
+
+  var socket = new WebSocket("ws://localhost:8080/view/ws/" + id); // WebSocket 서버 URL에 맞게 수정
+
+  socket.onmessage = function(event) {
+    var message = event.data;
+    // 알림 메시지를 처리하는 로직 작성
+    alert(message); // 예시로 알림 메시지를 경고창으로 표시
+  };
+</script>
 </html>
