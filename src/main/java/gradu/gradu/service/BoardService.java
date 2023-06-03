@@ -43,7 +43,7 @@ public class BoardService {
     private final BoardFileRepository boardFileRepository;
 
     @Transactional
-    public void save(BoardFileDTO boardFileDTO, BoardDTO boardDTO) throws IOException {
+    public Long save(BoardFileDTO boardFileDTO, BoardDTO boardDTO) throws IOException {
 
         Board board = Board.builder()
                 .missingName(boardDTO.getMissingName())
@@ -65,10 +65,10 @@ public class BoardService {
             String storedFileName = System.currentTimeMillis() + "_" + originalFilename;
 
 
-            savePath = "C:/temp/"+storedFileName;
+            savePath = "C:/temp/"+board.getMissingName()+board.getMissingNum()+"/"+storedFileName;
 
             // C:/temp/ 디렉토리가 존재하지 않는다면 생성
-            File dir = new File("C:/temp/");
+            File dir = new File("C:/temp/"+board.getMissingName()+board.getMissingNum()+"/");
             if (!dir.exists()) {
                 dir.mkdirs();
             }
@@ -119,7 +119,7 @@ public class BoardService {
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
-
+return saveId;
 /////////////////////////////////////////
 
 

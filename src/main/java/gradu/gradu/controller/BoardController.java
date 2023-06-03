@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import java.io.IOException;
+import java.nio.file.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -42,9 +43,9 @@ public class BoardController {
     @Transactional
     @PostMapping("/write")
     public String save(BoardFileDTO boardFileDTO, BoardDTO boardDTO, Model model) throws IOException {
-        boardService.save(boardFileDTO, boardDTO);
+        Long saveId =boardService.save(boardFileDTO, boardDTO);
         model.addAttribute("message","등록이 완료되었습니다");
-        model.addAttribute("searchUrl", "/view?id=120 ");
+        model.addAttribute("searchUrl", "/view?id="+saveId);
         return "message";
     }
 
@@ -77,13 +78,56 @@ public class BoardController {
 
         if (boardFile != null) {
             String storedFileName = boardFile.getStoredFileName();
-            String imageSrc = "/upload/" + storedFileName;
+            String imageSrc = "/upload/" +board.getMissingName()+board.getMissingNum()+"/"+ storedFileName;
+            String imageSrc2 = "/upload/"+board.getMissingName()+"/"+board.getMissingName()+board.getMissingNum()+".png";
             model.addAttribute("imageSrc", imageSrc);
+            model.addAttribute("imageSrc2", imageSrc2);
         }
 
         model.addAttribute("board", board);
 
+
+        Path folderPath = Paths.get("c:/temp/"+board.getMissingName()+board.getMissingNum()+"/");
+
+        try {
+            WatchService watchService = FileSystems.getDefault().newWatchService();
+
+            WatchKey watchKey = folderPath.register(watchService, StandardWatchEventKinds.ENTRY_CREATE);
+
+            Thread watchThread = new Thread(() -> {
+                try {
+                    while (true) {
+                        WatchKey key = watchService.take();
+
+                        if (key.isValid()) {
+                            for (WatchEvent<?> event : key.pollEvents()) {
+                                WatchEvent.Kind<?> kind = event.kind();
+
+                                if (kind == StandardWatchEventKinds.ENTRY_CREATE) {
+                                    WatchEvent<Path> ev = (WatchEvent<Path>) event;
+                                    Path filename = ev.context();
+                                    System.out.println("새로운 파일 추가: " + filename);
+
+                                    // 파일 추가 알림 로직 수행
+                                    // 클라이언트에게 알림을 보내는 등의 작업을 수행하면 됩니다.
+                                    // 예: WebSocket을 사용하여 클라이언트에게 실시간으로 알림을 보냄
+                                }
+                            }
+
+                            key.reset();
+                        }
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+
+            watchThread.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return "bbs2";
+
     }
 
 

@@ -6,12 +6,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    private String resourcePath ="/upload/**"; //view 에서 접근할 경로
-    private String savePath = "file:///C:/temp/";//실제 저장 파일 경로
+    private String resourcePath = "/upload/**"; // view에서 접근할 경로
+    private String savePath = "file:///C:/temp/"; // 실제 저장 파일 경로
 
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry){
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(resourcePath)
-                .addResourceLocations(savePath);
+                .addResourceLocations(savePath + "**/") // 동적으로 생성되는 폴더 경로 추가
+                .addResourceLocations(savePath); // 기본 저장 파일 경로 추가
     }
 }
