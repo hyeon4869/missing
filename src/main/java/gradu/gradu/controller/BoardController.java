@@ -30,6 +30,7 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 
 import java.io.IOException;
 import java.nio.file.*;
+import java.time.LocalDateTime;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -198,11 +199,7 @@ public class BoardController {
                                     WatchEvent<Path> ev = (WatchEvent<Path>) event;
                                     Path filename = ev.context();
                                     System.out.println("실종자를 찾았습니다.");
-                                    System.out.println("실종자 등록번호: " + board.getId());
-                                    System.out.println("실종자 이름: " + board.getMissingName());
-                                    System.out.println("실종자 나이: " + board.getMissingAge());
-                                    System.out.println("보호자 연락처: " + board.getMissingNum());
-                                    System.out.println("보호자 연락처: " + board.getMissingPlace());
+
 
                                     // 파일 추가 알림 로직 수행
                                     // 클라이언트에게 알림을 보내는 등의 작업을 수행하면 됩니다.

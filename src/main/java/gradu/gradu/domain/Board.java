@@ -25,6 +25,7 @@ public class Board {
     private String missingPlace;
     private String missingDate;
     private LocalDateTime boardTime;
+    private LocalDateTime findTime;
     private int fileAttached;//1이면 첨부, 0이면 없음
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE,orphanRemoval = true)

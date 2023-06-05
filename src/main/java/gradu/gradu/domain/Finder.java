@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,4 +24,6 @@ public class Finder {
     private String missingGender;
     private String missingPlace;
     private String missingDate;
+    private LocalDateTime findTime;
+
 }

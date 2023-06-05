@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class FinderService {
@@ -24,6 +26,7 @@ public class FinderService {
                 .missingPlace(board.getMissingPlace())
                 .missingDate(board.getMissingDate())
                 .missingNum(board.getMissingNum())
+                .findTime(LocalDateTime.now())
                 .build();
         finderRepository.save(finder);
     }

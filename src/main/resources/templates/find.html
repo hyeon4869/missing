@@ -104,7 +104,7 @@
         <th style="background-color: #eeeeee; text-align: left;">번호</th>
         <th style="background-color: #eeeeee; text-align: left;">이름(성별)</th>
         <th style="background-color: #eeeeee; text-align: left;">나이(현재나이)</th>
-        <th style="background-color: #eeeeee; text-align: left;">발생일시</th>
+        <th style="background-color: #eeeeee; text-align: left;">발견일시</th>
         <th style="background-color: #eeeeee; text-align: left;">발생장소</th>
       </tr>
       </thead>
@@ -114,7 +114,7 @@
         <th th:text="${finder.id}"></th>
         <th><a th:href="@{/view(id=${finder.id})}" th:text="${finder.missingName+'('+finder.missingGender+')'}"></a></th>
         <th th:text="${finder.missingAge}"></th>
-        <th th:text="${finder.missingDate}"></th>
+        <th th:text="${finder.getFindTime()}"></th>
         <th th:text="${finder.missingPlace}"></th>
       </tr>
       </tbody>
