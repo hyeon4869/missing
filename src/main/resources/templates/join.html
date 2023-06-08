@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="css/custom.css">
 
 <title>Let's go Home</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 </head>
 <body>
 	<nav class="navbar navbar-default">
@@ -19,7 +20,7 @@
 			<a class="navbar-brand" href="login">실종자 찾기 사이트</a>
 			<ul class="nav navbar-nav">
 				<li><a href="write">실종자 등록</a></li>
-				<li><a href="bbs">실종자 등록 현황 페이지</a></li></ul>
+				<li><a href="bbs">실종자 등록 현황 페이지</a></li>
 			<li><a href="bbs3">실종자 발견 현황</a></li></ul>
 
 		</div>
@@ -46,8 +47,10 @@
 				<br><br>
                 <h3 style="text-align: center;">회원가입 화면</h3>
                 <div class="form-group">
-                <input type="text" class="form-control" placeholder="아이디" id="userID" name="userID" maxlength="20">
-                  </div>
+                <input type="text" class="form-control" placeholder="아이디" id="userID" name="userID" onblur="idDuplicate()" maxlength="20">
+					<span id="userId-dup-result"></span><br>
+				</div>
+
 					<div class="form-group">
                 <input type="password" class="form-control" placeholder="비밀번호" id="userPassID" name="userPassID" maxlength="20">
                   </div>
@@ -73,13 +76,13 @@
           </div>	
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 	<script src="js/bootstrap.js"></script>
+	<!--입력칸 체크 -->
 	<script>
 		function checkUserId() {
 			const userID = document.getElementById("userID").value;
 			const userPassID = document.getElementById("userPassID").value;
 			const userName= document.getElementById("userName").value;
 			const userEmail = document.getElementById("userEmail").value;
-			const userCode = document.getElementById("userCode").value;
 
 			if (userID === "") {
 				alert("아이디를 입력해주세요.");
@@ -97,11 +100,39 @@
 				alert("이메일를 입력해주세요.");
 				return false;
 			}
-			if (userCode === "") {
-				alert("코드를 입력해주세요.");
-				return false;
-			}
+
 		}
 	</script>
+
+	<!--id 중복체크 -->
+<script th:inline="javascript"> 	<!--동적으로 사용 -->
+
+function idDuplicate() {
+	const userId = document.getElementById("userID").value;
+	const checkResult = document.getElementById("userId-dup-result");
+	$.ajax({
+		type: "post",
+		url: "/userIdCheck",
+		dataType: "text",
+		data: {
+			userId: userId
+		},
+		<!--ajax가 작동하면 -->
+		success: function (result) {
+			if (result == "ok") {
+				checkResult.innerText = "사용 가능한 아이디입니다.";
+				checkResult.style.color = "green";
+			} else {
+				checkResult.innerText = "이미 사용중인 아이디 입니다.";
+				checkResult.style.color = "red";
+			}
+		},
+		<!--ajax가 작동하지 않으면 -->
+		error: function () {
+			alert("ajax 실패");
+		}
+	});
+}
+</script>
 </body>
 </html>

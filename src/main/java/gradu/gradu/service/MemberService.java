@@ -66,5 +66,14 @@ public class MemberService {
             return null;
         }
     }
+//이메일 중복체크
+    public String userIdCheck(String userId) {
+        Optional<Member> optionalMember= memberRepository.findByUserID(userId);
+        if(optionalMember.isEmpty()){
+            return "ok";
+        } else {
+            return "no";
+        }
+    }
 }
 
