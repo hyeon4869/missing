@@ -46,8 +46,8 @@ public class BoardController {
     private final BoardFileRepository boardFileRepository;
     private final FinderService finderService;
 
-    @GetMapping("/find")
-    public String findForm(Model model, @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, String searchKey, String searchGender, String h_area1) {
+    @GetMapping("/bbs3")
+    public String findForm(Model model, @PageableDefault(page = 0, size = 20, sort = "findTime", direction = Sort.Direction.DESC) Pageable pageable, String searchKey, String searchGender, String h_area1) {
         Page<Finder> list =null;
 
         list = finderService.findAll(pageable);
@@ -61,7 +61,8 @@ public class BoardController {
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
 
-        return "find";    }
+        return "bbs3";
+    }
 
     @GetMapping("/write")
     public String saveForm(){
@@ -73,12 +74,12 @@ public class BoardController {
     public String save(BoardFileDTO boardFileDTO, BoardDTO boardDTO, Model model) throws IOException {
         Long saveId =boardService.save(boardFileDTO, boardDTO);
         model.addAttribute("message","등록이 완료되었습니다");
-        model.addAttribute("searchUrl", "/view?id="+saveId);
+        model.addAttribute("searchUrl", "bbs");
         return "message";
     }
 
     @GetMapping("/bbs")
-    public String listForm(Model model, @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, String searchKey, String searchGender, String h_area1) {
+    public String listForm(Model model, @PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, String searchKey, String searchGender, String h_area1) {
         Page<Board> list =null;
 
         if (searchGender == null || "select".equals(searchGender) && "select".equals(h_area1) && searchKey.isEmpty()) {
@@ -142,7 +143,7 @@ public class BoardController {
         private static void sendImageAddedNotification(Board board) {
             try {
                 if (session != null && session.isOpen()) {
-                    String message = "실종자를 발견했습니다. \n등록번호 : "+board.getId()+"\n실종자 이름 : "+board.getMissingName()+"\n실종자 발견 페이지에서 확인해주세요."; // 알림 메시지
+                    String message = "실종자를 발견했습니다. \n번호 : "+board.getId()+"\n실종자 이름 : "+board.getMissingName()+"\n실종자 발견 페이지에서 확인해주세요."; // 알림 메시지
                     session.sendMessage(new TextMessage(message)); // 클라이언트로 메시지 전송
                 }
             } catch (IOException e) {
@@ -170,7 +171,7 @@ public class BoardController {
             String imageSrc = "/upload/" +board.getMissingName()+board.getMissingNum()+"/"+ storedFileName;
 
             String imageSrc2= null;
-            imageSrc2 = "/upload/"+board.getMissingName()+board.getMissingNum()+"/"+board.getMissingName()+board.getMissingNum()+".png";
+            imageSrc2 = "/upload/"+board.getMissingName()+board.getMissingNum()+"/"+"라즈베리탐색이미지.png";
 
             model.addAttribute("imageSrc", imageSrc);
             model.addAttribute("imageSrc2", imageSrc2);
@@ -227,5 +228,7 @@ public class BoardController {
         return "bbs2";
 
     }
+
+
 
 }

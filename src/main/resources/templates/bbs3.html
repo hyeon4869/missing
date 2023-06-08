@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewprt" content="width=device-width", initial-scale="1">
+  <link rel="stylesheet" href="css/bootstrap.css">
+  <link rel="stylesheet" href="css/custom.css">
+
+  <title>Let's go Home</title>
+</head>
+<body>
+<nav class="navbar navbar-default">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle collapsed"
+            data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+            aria-expanded="false">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="main">실종자 찾기 사이트</a>
+  </div>
+  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav">
+      <li><a href="write">실종자 등록</a></li>
+      <li><a href="bbs">실종자 등록 현황</a></li>
+      <li class="active"><a href="bbs3">실종자 발견 현황</a></li></ul>
+
+    <ul class="nav navbar-nav navbar-right">
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle"
+           data-toggle="dropdown" role="button" aria-haspopup="true"
+           aria-expanded="false">회원관리<span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="logoutAction">로그아웃</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
+<!-- 	현황 페이지 게시글 표 -->
+<div class="box2">
+  <dt><h4>
+    &nbsp&nbsp 발견된 실종자나 기관에서 보호중인 실종자를 검색하실 수 있습니다.
+  </dt></h4>
+</div><br>
+<div class="box1">
+  <dt><h4>발견일시</h4></dt>
+  <input type="date"
+         id="date"
+         name="searchDate"
+         max="2030-12-31"
+         min="2020-01-01"
+         value="2023-03-01"></label>
+  <br><p></p>
+  <dt><h4>발견지역</h4></dt>
+  <form method="get" th:action="@{/find}">
+
+  <select name="h_area1" onChange="cat1_change(this.value,h_area2)" >
+    <option>select</option>
+    <option value='1'>서울</option>
+    <option value='2'>부산</option>
+    <option value='3'>대구</option>
+    <option value='4'>인천</option>
+    <option value='5'>광주</option>
+    <option value='6'>대전</option>
+    <option value='7'>울산</option>
+    <option value='8'>강원</option>
+    <option value='9'>경기</option>
+    <option value='10'>경남</option>
+    <option value='11'>경북</option>
+    <option value='12'>전남</option>
+    <option value='13'>전북</option>
+    <option value='14'>제주</option>
+    <option value='15'>충남</option>
+    <option value='16'>충북</option>
+  </select>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <button class="search-btn" type="submit">
+    <i class="fas fa-search"></i>
+  </button>
+  <dt><h4>성별</h4></dt>
+  <select name="searchGender" onChange="cat1_change(this.value,h_area2)" >
+    <option>select</option>
+    <option value="1">남자</option>
+    <option value="2">여자</option>
+  </select>
+  <dt><h4>이름</h4></dt>
+  <dd><input type="#" name="searchKey" placeholder="이름를 입력하세요"></dd>
+  </form>
+</div>
+<div class="container">
+  <div class="row">
+    <table class="table table-striped" styl="text-align : center; border: 1px solid #dddddd">
+      <thead>
+      <tr>
+        <th style="background-color: #eeeeee; text-align: left;">체크</th>
+        <th style="background-color: #eeeeee; text-align: left;">번호</th>
+        <th style="background-color: #eeeeee; text-align: left;">이름(성별)</th>
+        <th style="background-color: #eeeeee; text-align: left;">나이(현재나이)</th>
+        <th style="background-color: #eeeeee; text-align: left;">발생일시</th>
+        <th style="background-color: #eeeeee; text-align: left;">발생장소</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="finder: ${finderList}">
+        <th><input type="checkbox"></th>
+        <th th:text="${finder.id}"></th>
+        <th><a th:href="@{/view(id=${finder.id})}" th:text="${finder.missingName+'('+finder.missingGender+')'}"></a></th>
+        <th th:text="${finder.missingAge}"></th>
+        <th th:text="${finder.getFindTime()}"></th>
+        <th th:text="${finder.missingPlace}"></th>
+      </tr>
+      </tbody>
+
+    </table>
+    <div style=" text-align: left;">
+      <button style=" display: inline-block;">삭제</button>
+      <div class="text-center">
+        <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
+          <a th:if="${page != nowPage}" th:href="@{/find(page=${page - 1}, searchKey=${param.searchKey}, searchGender=${param.searchGender}, h_area1=${param.h_area1})}" th:text="${page}"></a>
+          <strong th:if="${page == nowPage}" th:text="${page}" style="color : red"></strong>
+        </th:block>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="js/bootstrap.js"></script>
+</body>
+</html>

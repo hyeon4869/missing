@@ -59,7 +59,7 @@
          value="2023-03-01"></label>
   <br><p></p>
   <dt><h4>발생지역</h4></dt>
-  <form method="get" th:action="@{/bbs}">
+  <form method="get" th:action="@{/find}">
     <select name="h_area1" onChange="cat1_change(this.value,h_area2)" >
       <option>select</option>
       <option value='1'>서울</option>
@@ -124,7 +124,7 @@
     </div>
     <div class="text-center">
       <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
-        <a th:if="${page != nowPage}" th:href="@{/bbs(page=${page - 1}, searchKey=${param.searchKey}, searchGender=${param.searchGender}, h_area1=${param.h_area1})}" th:text="${page}"></a>
+        <a th:if="${page != nowPage}" th:href="@{/find(page=${page - 1}, searchKey=${param.searchKey}, searchGender=${param.searchGender}, h_area1=${param.h_area1})}" th:text="${page}"></a>
         <strong th:if="${page == nowPage}" th:text="${page}" style="color : red"></strong>
       </th:block>
     </div>

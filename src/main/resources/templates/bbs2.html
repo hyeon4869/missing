@@ -27,7 +27,9 @@
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav">
       <li><a href="main">메인</a></li>
-      <li class="active"><a href="bbs">실종자 등록 현황 페이지</a></li></ul>
+      <li class="active"><a href="bbs">실종자 등록 현황 </a></li>
+    <li><a href="bbs3">실종자 발견 현황</a></li></ul>
+
     <div th:if="${session.userID == null}"></div>
     <ul class="nav navbar-nav navbar-right">
       <li class="dropdown">
@@ -98,7 +100,7 @@
     var message = event.data;
     // 알림 메시지를 처리하는 로직 작성
     alert(message); // 예시로 알림 메시지를 경고창으로 표시
-    window.location.href = "/find";
+    window.location.href = "/bbs3";
 
   };
 </script>
