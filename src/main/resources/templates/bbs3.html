@@ -43,61 +43,66 @@
     &nbsp&nbsp 발견된 실종자나 기관에서 보호중인 실종자를 검색하실 수 있습니다.
   </dt></h4>
 </div><br>
-<div class="box1">
-  <dt><h4>발견일시</h4></dt>
-  <input type="date"
-         id="date"
-         name="searchDate"
-         max="2030-12-31"
-         min="2020-01-01"
-         value="2023-03-01"></label>
-  <br><p></p>
-  <dt><h4>발견지역</h4></dt>
-  <form method="get" th:action="@{/find}">
+<div class="box3">
+  <div class="bo1"><dt><h4>발견일시</h4></dt>
+    <input type="date"
+           name="searchDate"
+           id="date"
+           max="2030-12-31"
+           min="2020-01-01"
+           value="2023-03-01"></label></div>
+  <div class="bo3"><dt><h4>발견지역</h4></dt>
+    <form method="get" th:action="@{/find}">
 
-  <select name="h_area1" onChange="cat1_change(this.value,h_area2)" >
-    <option>select</option>
-    <option value='1'>서울</option>
-    <option value='2'>부산</option>
-    <option value='3'>대구</option>
-    <option value='4'>인천</option>
-    <option value='5'>광주</option>
-    <option value='6'>대전</option>
-    <option value='7'>울산</option>
-    <option value='8'>강원</option>
-    <option value='9'>경기</option>
-    <option value='10'>경남</option>
-    <option value='11'>경북</option>
-    <option value='12'>전남</option>
-    <option value='13'>전북</option>
-    <option value='14'>제주</option>
-    <option value='15'>충남</option>
-    <option value='16'>충북</option>
-  </select>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <button class="search-btn" type="submit">
-    <i class="fas fa-search"></i>
-  </button>
-  <dt><h4>성별</h4></dt>
-  <select name="searchGender" onChange="cat1_change(this.value,h_area2)" >
-    <option>select</option>
-    <option value="1">남자</option>
-    <option value="2">여자</option>
-  </select>
-  <dt><h4>이름</h4></dt>
-  <dd><input type="#" name="searchKey" placeholder="이름를 입력하세요"></dd>
+    <select name="h_area1" onChange="cat1_change(this.value,h_area2)" >
+      <option>select</option>
+      <option value='1'>서울</option>
+      <option value='2'>부산</option>
+      <option value='3'>대구</option>
+      <option value='4'>인천</option>
+      <option value='5'>광주</option>
+      <option value='6'>대전</option>
+      <option value='7'>울산</option>
+      <option value='8'>강원</option>
+      <option value='9'>경기</option>
+      <option value='10'>경남</option>
+      <option value='11'>경북</option>
+      <option value='12'>전남</option>
+      <option value='13'>전북</option>
+      <option value='14'>제주</option>
+      <option value='15'>충남</option>
+      <option value='16'>충북</option>
+    </select></div>
+  <div class="bo2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+          integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <button class="search-btn" type="submit">
+      <i class="fas fa-search"></i>
+    </button></div>
+  <div class="bo1">
+    <dt><h4>성별</h4></dt>
+    <select name="searchGender" onChange="cat1_change(this.value,h_area2)" >
+      <option>select</option>
+      <option value="1">남자</option>
+      <option value="2">여자</option>
+    </select></div>
+  <div class="bo3">
+    <dt><h4>이름</h4></dt>
+    <dd><input type="#" name="searchKey" placeholder="이름를 입력하세요"></dd></div>
   </form>
+
 </div>
 <div class="container">
   <div class="row">
-    <table class="table table-striped" styl="text-align : center; border: 1px solid #dddddd">
+    <table class="table table-striped" style="text-align : center; border: 1px solid #dddddd">
       <thead>
       <tr>
         <th style="background-color: #eeeeee; text-align: left;">체크</th>
         <th style="background-color: #eeeeee; text-align: left;">번호</th>
         <th style="background-color: #eeeeee; text-align: left;">이름(성별)</th>
         <th style="background-color: #eeeeee; text-align: left;">나이(현재나이)</th>
-        <th style="background-color: #eeeeee; text-align: left;">발생일시</th>
+        <th style="background-color: #eeeeee; text-align: left;">발견일시</th>
         <th style="background-color: #eeeeee; text-align: left;">발생장소</th>
       </tr>
       </thead>

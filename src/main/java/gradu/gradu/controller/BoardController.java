@@ -66,7 +66,7 @@ public class BoardController {
 
     @GetMapping("/write")
     public String saveForm(){
-        return "/write";
+        return "write";
     }
 
     @Transactional
@@ -74,7 +74,7 @@ public class BoardController {
     public String save(BoardFileDTO boardFileDTO, BoardDTO boardDTO, Model model) throws IOException {
         Long saveId =boardService.save(boardFileDTO, boardDTO);
         model.addAttribute("message","등록이 완료되었습니다");
-        model.addAttribute("searchUrl", "bbs");
+        model.addAttribute("searchUrl", "/view?id="+saveId);
         return "message";
     }
 
@@ -145,9 +145,12 @@ public class BoardController {
                 if (session != null && session.isOpen()) {
                     String message = "실종자를 발견했습니다. \n번호 : "+board.getId()+"\n실종자 이름 : "+board.getMissingName()+"\n실종자 발견 페이지에서 확인해주세요."; // 알림 메시지
                     session.sendMessage(new TextMessage(message)); // 클라이언트로 메시지 전송
+                    Thread.sleep(1000); // 1초 대기
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         }
 

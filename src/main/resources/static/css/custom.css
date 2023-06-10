@@ -47,6 +47,14 @@ h4 {
 	margin-left: auto;
 	margin-right: auto;
 }
+.box3{
+	background-color: rgb(204, 237, 242);
+	overflow: hidden;
+	width:1170px;
+	height: 80px;
+	margin-left: auto;
+	margin-right: auto;
+}
 .search-btn {
 	color: #EDEDED;
 	float: right;
@@ -75,7 +83,7 @@ h4 {
 .bo2 {
 	float: center;
 }
-.bo1 {
+.bo3 {
 	float: left;
 	margin-left: 5%;
 }

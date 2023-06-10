@@ -23,22 +23,21 @@ public class MemberService {
 
     @Transactional
     public Member save(MemberDTO memberDTO) {
-
         validateDuplicateMember(memberDTO);
-        //BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
 
         Member member = Member.builder()
                 .userID(memberDTO.getUserID())
                 .userPassID(memberDTO.getUserPassID())
-                //.userPassID(passwordEncoder.encode(memberDTO.getUserPassID()))
                 .userName(memberDTO.getUserName())
-                .userGender(memberDTO.getUserGender())
                 .userEmail(memberDTO.getUserEmail())
                 .userCode(memberDTO.getUserCode())
+                .userGender(memberDTO.getUserGender()) // 수정된 부분
                 .build();
         memberRepository.save(member);
         return member;
     }
+
 
     private void validateDuplicateMember(MemberDTO memberDTO) {
         Optional<Member> byUserID = memberRepository.findByUserID(memberDTO.getUserID());

@@ -45,6 +45,7 @@ public class BoardService {
     @Transactional
     public Long save(BoardFileDTO boardFileDTO, BoardDTO boardDTO) throws IOException {
 
+
         Board board = Board.builder()
                 .missingName(boardDTO.getMissingName())
                 .missingAge(boardDTO.getMissingAge())
