@@ -16,5 +16,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
                 .setAllowedOrigins("*");
         registry.addHandler(new BoardController.MyWebSocketHandler(), "/view/ws/{id}")
                 .setAllowedOrigins("*");
+        registry.addHandler(new BoardController.MyWebSocketHandler(), "/bbs3/{id}")
+                .setAllowedOrigins("*");
     }
 }

@@ -121,62 +121,6 @@ public class BoardService {
                     e.printStackTrace();
                 }
 return saveId;
-/////////////////////////////////////////
-
-
-
-//        RestTemplate restTemplate = new RestTemplate();
-//
-//// StringHttpMessageConverter의 기본 인코딩을 UTF-8로 설정
-//        StringHttpMessageConverter stringConverter = new StringHttpMessageConverter(StandardCharsets.UTF_8);
-//        restTemplate.getMessageConverters().removeIf(c -> c instanceof StringHttpMessageConverter);
-//        restTemplate.getMessageConverters().add(0, stringConverter);
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-//
-//        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-//
-//        if (savePath != null) {
-//            // 파일을 FileSystemResource로 변환하여 추가
-//            File boardFile = new File(savePath);
-//            long imageSize = boardFile.length();
-//            body.add("boardFile", new FileSystemResource(boardFile));
-//            body.add("imageSize", imageSize);
-//        }
-//
-//// 나머지 파라미터 추가
-//        body.add("keyword", "실종자 등록\n");
-//        body.add("missingName", boardDTO.getMissingName());
-//        body.add("missingGender", boardDTO.getMissingGender());
-//        body.add("missingAge", boardDTO.getMissingAge());
-//        body.add("missingPlace", boardDTO.getMissingPlace());
-//        body.add("missingDate", boardDTO.getMissingDate());
-//        body.add("missingNum", boardDTO.getMissingNum());
-//
-//        HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(body, headers);
-//        String url = "http://192.168.26.129:12345/";
-//
-//        ResponseEntity<byte[]> response = restTemplate.postForEntity(url, request, byte[].class);
-//
-//        if (response.getStatusCode() == HttpStatus.OK) {
-//            // 성공적으로 처리된 경우
-//            byte[] imageBytes = response.getBody();
-//
-//            // 이미지 파일을 저장할 디렉토리 경로
-//            String saveDirectory = "C:/temp/";
-//
-//            // 저장할 파일 경로 및 이름
-//            String saveFilePath = saveDirectory + "image.jpg";
-//
-//            // 이미지 파일 저장
-//            try (FileOutputStream fos = new FileOutputStream(saveFilePath)) {
-//                fos.write(imageBytes);
-//                fos.flush();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//       }
 
 
     }

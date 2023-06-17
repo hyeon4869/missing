@@ -6,33 +6,24 @@ import gradu.gradu.domain.Finder;
 import gradu.gradu.dto.BoardDTO;
 import gradu.gradu.dto.BoardFileDTO;
 import gradu.gradu.repository.BoardFileRepository;
-import gradu.gradu.repository.BoardRepository;
 import gradu.gradu.service.BoardService;
 import gradu.gradu.service.FinderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.socket.*;
-import org.springframework.web.socket.config.annotation.EnableWebSocket;
-import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
-import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
 
+
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.nio.file.*;
-import java.time.LocalDateTime;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static gradu.gradu.controller.BoardController.MyWebSocketHandler.handleImageAddedEvent;
 
@@ -65,8 +56,15 @@ public class BoardController {
     }
 
     @GetMapping("/write")
-    public String saveForm(){
-        return "write";
+    public String saveForm(HttpSession session, Model model){
+        if(session.getAttribute("userID")==null){
+            model.addAttribute("message", "로그인 후 사용이 가능합니다.");
+            model.addAttribute("searchUrl", "/");
+            return "message";
+        } else {
+            return "write";
+        }
+
     }
 
     @Transactional
@@ -75,6 +73,7 @@ public class BoardController {
         Long saveId =boardService.save(boardFileDTO, boardDTO);
         model.addAttribute("message","등록이 완료되었습니다");
         model.addAttribute("searchUrl", "/view?id="+saveId);
+        //model.addAttribute("searchUrl", "/bbs");
         return "message";
     }
 
