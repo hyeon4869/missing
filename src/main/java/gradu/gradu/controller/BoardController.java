@@ -72,8 +72,8 @@ public class BoardController {
     public String save(BoardFileDTO boardFileDTO, BoardDTO boardDTO, Model model) throws IOException {
         Long saveId =boardService.save(boardFileDTO, boardDTO);
         model.addAttribute("message","등록이 완료되었습니다");
-        model.addAttribute("searchUrl", "/view?id="+saveId);
-        //model.addAttribute("searchUrl", "/bbs");
+        //model.addAttribute("searchUrl", "/view?id="+saveId);
+        model.addAttribute("searchUrl", "/bbs");
         return "message";
     }
 
