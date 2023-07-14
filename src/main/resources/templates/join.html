@@ -53,7 +53,9 @@
 
 					<div class="form-group">
                 <input type="password" class="form-control" placeholder="비밀번호" id="userPassID" name="userPassID" maxlength="20">
-                  </div>
+						<span id="password-error" style="color: red;"></span>
+
+					</div>
                   <div class="form-group">
                 <input type="text" class="form-control" placeholder="이름" id="userName" name="userName" maxlength="20">
                   </div>
@@ -134,5 +136,20 @@ function idDuplicate() {
 	});
 }
 </script>
+	<script>
+		const passwordInput = document.getElementById("userPassID");
+		const passwordError = document.getElementById("password-error");
+
+		passwordInput.addEventListener("input", function () {
+			const password = passwordInput.value;
+
+			if (password.length < 8) {
+				passwordError.textContent = "비밀번호는 8자 이상이어야 합니다.";
+			} else {
+				passwordError.textContent = "";
+			}
+		});
+	</script>
+
 </body>
 </html>

@@ -2,7 +2,6 @@ package gradu.gradu.dto;
 
 import lombok.*;
 
-import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter
@@ -20,5 +19,8 @@ public class MemberDTO {
     private String userGender;
     private String userEmail;
     private String userCode;
+    private String pwd1;
+    private String pwd2;
+    private String pwd3;
 
 }

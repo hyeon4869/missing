@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>실종자 찾기</title>
+
+
+  <style>
+    /*전체 비율수정*/
+    body {
+      zoom: 67%;
+    }
+
+    .all {
+      width: 1200px;
+      margin: 0 auto;
+    }
+
+    /*로고 클릭시 메인 페이지 이동*/
+    .imgclass {
+      width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+      padding-bottom: 30px;
+    }
+
+    .imgclass img {
+      width: 300px;
+      height: 300px;
+    }
+
+    h2 {
+      font-size: 45pt;
+      text-align: center;
+    }
+
+    /* 새 닉네임창 */
+    .new_nickname,
+    .p3,
+    .p4,
+    .p5 {
+      text-align: center;
+      font-size: 32pt;
+      margin-bottom: 20px;
+    }
+
+    /* 취소버튼, 변경버튼 */
+    .btn2,
+    .btn3 {
+      background: cornflowerblue;
+      width: 213px;
+      height: 69px;
+      font-size: 30px;
+      color: white;
+      font-weight: bold;
+      border: none;
+      margin-right: 10px;
+    }
+
+    .button {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    /* 모바일 반응형 */
+    @media screen and (max-width: 767px) {
+      .all,
+      .imgclass {
+        zoom: 70%;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        padding: 0 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+<!-- 로고 클릭시 메인 페이지 이동 -->
+<a href="home">
+  <div class="imgclass">
+    <img src="/image/main.jpg" />
+  </div>
+</a>
+
+<div th:each="memberList:${memberList}" class="all">
+  <h2>회원정보 수정</h2>
+
+  <form  method="post" action="/mypage/update">
+    <!-- 비밀번호 변경 -->
+    <div class="password">
+      <p class="p3">
+        현재 비밀번호<br />
+        <input type="password" name="pwd1" id="pwd1" style="width: 694px; height: 40px; font-size: 20pt" />
+      </p>
+
+      <p class="p4">
+        새 비밀번호<br />
+        <input type="password" id="pwd2" name="Pwd2" placeholder="비밀번호는 8~16자 이내로 입력해야합니다." style="width: 694px; height: 40px; font-size: 20pt" />
+      </p>
+
+      <p class="p5">
+        비밀번호 재확인<br />
+        <input type="password" id="pwd3" name="Pwd3" style="width: 694px; height: 40px; font-size: 20pt" />
+      </p>
+    </div>
+
+    <div class="button">
+      <input type="button" class="btn2" value="취소" onclick="goBack();" />
+      <input type="submit" class="btn3" value="변경" />
+    </div>
+  </form>
+</div>
+</body>
+<script>
+  function goBack() {
+    window.history.back();
+  }
+</script>
+</html>

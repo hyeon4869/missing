@@ -67,16 +67,17 @@ public class BoardController {
 
     }
 
+// 게시물 저장
     @Transactional
     @PostMapping("/write")
     public String save(BoardFileDTO boardFileDTO, BoardDTO boardDTO, Model model) throws IOException {
         Long saveId =boardService.save(boardFileDTO, boardDTO);
         model.addAttribute("message","등록이 완료되었습니다");
-        //model.addAttribute("searchUrl", "/view?id="+saveId);
-        model.addAttribute("searchUrl", "/bbs");
+        model.addAttribute("searchUrl", "/view?id="+saveId);
+        //model.addAttribute("searchUrl", "/bbs");
         return "message";
     }
-
+//실종자 현황 리스트
     @GetMapping("/bbs")
     public String listForm(Model model, @PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, String searchKey, String searchGender, String h_area1) {
         Page<Board> list =null;
@@ -156,8 +157,6 @@ public class BoardController {
         public static void handleImageAddedEvent(Board board) {
             // 파일 추가 알림 로직 수행
             sendImageAddedNotification(board);
-            // 클라이언트에게 알림을 보내는 등의 작업을 수행하면 됩니다.
-            // 예: WebSocket을 사용하여 클라이언트에게 실시간으로 알림을 보냄
         }
 
     }
@@ -167,8 +166,9 @@ public class BoardController {
     public String bbsView(Model model, Long id) {
         Board board = boardService.findById(id);
         BoardFile boardFile = boardFileRepository.findByBoard_Id(id);
-
+//이미지 여부 확인
         if (boardFile != null) {
+            //이미지가 있다면
             String storedFileName = boardFile.getStoredFileName();
             String imageSrc = "/upload/" +board.getMissingName()+board.getMissingNum()+"/"+ storedFileName;
 
@@ -181,7 +181,7 @@ public class BoardController {
 
         model.addAttribute("board", board);
 
-
+//감지할 폴더 절대경로
         Path folderPath = Paths.get("c:/temp/"+board.getMissingName()+board.getMissingNum()+"/");
 
         try {
@@ -203,12 +203,8 @@ public class BoardController {
                                     Path filename = ev.context();
                                     System.out.println("실종자를 찾았습니다.");
 
-
-                                    // 파일 추가 알림 로직 수행
-                                    // 클라이언트에게 알림을 보내는 등의 작업을 수행하면 됩니다.
-                                    // 예: WebSocket을 사용하여 클라이언트에게 실시간으로 알림을 보냄
                                     handleImageAddedEvent(board);
-
+                                    //실시간으로 이미지 파일이 전송되면 실종자 엔티티에 정보 저장
                                     finderService.save(board);
 
 

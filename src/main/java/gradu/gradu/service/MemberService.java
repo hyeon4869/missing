@@ -1,16 +1,12 @@
 package gradu.gradu.service;
 
-//import gradu.gradu.config.SecurityConfig;
 import gradu.gradu.domain.Member;
 import gradu.gradu.dto.MemberDTO;
 import gradu.gradu.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.apache.bcel.classfile.Utility;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Security;
 import java.util.Optional;
 
 @Service
@@ -19,7 +15,6 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    //private final SecurityConfig securityConfig;
 
     @Transactional
     public Member save(MemberDTO memberDTO) {
@@ -31,7 +26,6 @@ public class MemberService {
                 .userPassID(memberDTO.getUserPassID())
                 .userName(memberDTO.getUserName())
                 .userEmail(memberDTO.getUserEmail())
-                .userCode(memberDTO.getUserCode())
                 .userGender(memberDTO.getUserGender()) // 수정된 부분
                 .build();
         memberRepository.save(member);
@@ -74,5 +68,30 @@ public class MemberService {
             return "no";
         }
     }
+
+    public Member findByUserId(String myUserId) {
+        return memberRepository.findByUserID(myUserId).get();
+    }
+
+    @Transactional
+    public void update(MemberDTO memberDTO, String myUserId) {
+        Optional<Member> byMember = memberRepository.findByUserID(myUserId);
+
+        if (byMember.isPresent()) {
+            Member member = byMember.get();
+            if (member.getUserPassID().equals(memberDTO.getPwd1())) {
+                if (memberDTO.getPwd2().equals(memberDTO.getPwd3())) {
+                    member.setUserPassID(memberDTO);
+                    memberRepository.save(member);
+                } else {
+                    throw new IllegalArgumentException("변경할 비밀번호가 일치하지 않습니다.");
+                }
+            } else {
+                throw new IllegalArgumentException("현재 비밀번호가 맞지 않습니다.");
+            }
+        }
+    }
+
+
 }
 

@@ -1,5 +1,6 @@
 package gradu.gradu.domain;
 
+import gradu.gradu.dto.MemberDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -27,8 +28,10 @@ public class Member {
 
     private String userEmail;
 
-    private String userCode;
-
     @OneToMany(mappedBy = "member")
     private List<Board>  boards = new ArrayList<>();
+
+    public void setUserPassID(MemberDTO memberDTO) {
+        this.userPassID= memberDTO.getPwd3();
+    }
 }
