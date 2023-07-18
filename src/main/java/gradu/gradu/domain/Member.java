@@ -34,4 +34,10 @@ public class Member {
     public void setUserPassID(MemberDTO memberDTO) {
         this.userPassID= memberDTO.getPwd3();
     }
+
+    public void setResetPassword(String temporaryPassword){
+        this.userPassID = temporaryPassword;
+    }
+
+
 }

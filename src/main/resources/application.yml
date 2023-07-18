@@ -3,7 +3,7 @@ server:
     session:
       tracking-modes:
         - cookie
-
+# db설정
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -12,16 +12,17 @@ spring:
     password: 12341234
   thymeleaf:
     cache: false
+  #사진 경로 설정
   servlet:
     multipart:
       enabled: true
       location: C:/temp/
 
-
+#이메일 설정
   mail:
-    host: smtp.naver.com
+    host: smtp.gmail.com
     port: 587
-    username: mpband4444@naver.com
+    username: mpband4869@gmail.com
     password:
     properties:
       mail:

@@ -4,6 +4,8 @@ import gradu.gradu.domain.Member;
 import gradu.gradu.dto.MemberDTO;
 import gradu.gradu.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,7 @@ import java.util.Optional;
 public class MemberController {
 
     private final MemberService memberService;
+    private final JavaMailSender mailSender;
 
     @GetMapping("/")
     public String indexForm() {
@@ -55,6 +58,11 @@ public class MemberController {
             model.addAttribute("message", ex.getMessage());
             model.addAttribute("searchUrl", "/mypage/update");
             return "message";}
+        else if(ex.getMessage().equals("일치하는 사용자가 없습니다.")){
+            model.addAttribute("message", ex.getMessage());
+            model.addAttribute("searchUrl","/login");
+            return "message";
+        }
         else{
             return "message";
         }
@@ -128,7 +136,36 @@ public class MemberController {
 
     //아이디 찾기 기능
     @PostMapping("/findid")
-    public String findid(){
-     return "login";
+    public String findid(MemberDTO memberDTO, Model model){
+        Member member=memberService.findId(memberDTO);
+        model.addAttribute("message","아이디는 "+member.getUserID()+" 입니다.");
+        model.addAttribute("searchUrl","/login");
+        return "message";
     }
+
+    @GetMapping("/findPwd")
+    public String findPwdForm(){
+        return "findPwd";
+    }
+
+    @PostMapping("/findPwd")
+    public String findPwd(Model model, MemberDTO memberDTO, String userEmail){
+        memberService.findPwd(memberDTO);
+        String temporaryPassword = memberService.generateTemporaryPassword();
+        sendPasswordResetEmail(userEmail, temporaryPassword);
+        memberService.resetPassword(memberDTO,temporaryPassword);
+        model.addAttribute("message", "회원님의 이메일에 임시 비밀번호를 보내드렸습니다. 확인해주세요.");
+        model.addAttribute("searchUrl","/login");
+        return "message";
+    }
+
+    //초기화된 비밀번호 이메일 전송 기능
+    public void sendPasswordResetEmail(String userEmail, String temporaryPassword){
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(userEmail);
+        message.setSubject("실종자 찾기 사이트 회원 비밀번호 재설정 안내");
+        message.setText("안녕하세요, 임시 비밀번호는  " +temporaryPassword + " 입니다. \n 로그인 후 비밀번호 수정해주시기 바랍니다.");
+        mailSender.send(message);
+    }
+
 }
