@@ -34,7 +34,11 @@
       <img src="image/main.jpg"  style="height:400px; width:1000px;"></div>
     <br><br>
     <h3 style="text-align: center;">로그인이 필요합니다.</h3>
-    <form method="post" action="auth/login">
+
+    <form method="post" action="auth/login"  th:object="${memberDTO}">
+      <!-- CSRF 토큰 추가 -->
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
     <div class="form-group">
       <input type="text" class="form-control" placeholder="아이디" name="userID" maxlength="20">
     </div>

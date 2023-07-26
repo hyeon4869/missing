@@ -4,8 +4,8 @@ import gradu.gradu.domain.Member;
 import gradu.gradu.dto.MemberDTO;
 import gradu.gradu.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,10 +24,15 @@ public class MemberService {
     public Member save(MemberDTO memberDTO) {
         validateDuplicateMember(memberDTO);
 
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        System.out.println("입력된 비밀번호: "+ memberDTO.getUserPassID());
+
+        String hashedPassword = passwordEncoder.encode(memberDTO.getUserPassID());
+        System.out.println("암호화된 비밀번호: "+ hashedPassword);
 
         Member member = Member.builder()
                 .userID(memberDTO.getUserID())
-                .userPassID(memberDTO.getUserPassID())
+                .userPassID(hashedPassword)
                 .userName(memberDTO.getUserName())
                 .userEmail(memberDTO.getUserEmail())
                 .userGender(memberDTO.getUserGender()) // 수정된 부분
@@ -48,10 +53,11 @@ public class MemberService {
         Optional<Member> byUserID = memberRepository.findByUserID(memberDTO.getUserID());
         if(byUserID.isPresent()){
             Member  member = byUserID.get();
-            if(member.getUserPassID().equals( memberDTO.getUserPassID())) {
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+            if(passwordEncoder.matches(memberDTO.getUserPassID(), member.getUserPassID())) {
                 MemberDTO DTO = MemberDTO.builder()
                          .userID(member.getUserID())
-                         .userPassID(member.getUserPassID())
                          .userEmail(member.getUserEmail())
                          .userGender(member.getUserGender())
                          .build();
@@ -81,11 +87,15 @@ public class MemberService {
     public void update(MemberDTO memberDTO, String myUserId) {
         Optional<Member> byMember = memberRepository.findByUserID(myUserId);
 
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+
         if (byMember.isPresent()) {
             Member member = byMember.get();
-            if (member.getUserPassID().equals(memberDTO.getPwd1())) {
+            if (passwordEncoder.matches(memberDTO.getPwd1(), member.getUserPassID())) {
                 if (memberDTO.getPwd2().equals(memberDTO.getPwd3())) {
-                    member.setUserPassID(memberDTO);
+                    String newPassword = passwordEncoder.encode(memberDTO.getPwd3());
+                    member.setUserPassID(newPassword);
                     memberRepository.save(member);
                 } else {
                     throw new IllegalArgumentException("변경할 비밀번호가 일치하지 않습니다.");
@@ -141,7 +151,10 @@ public class MemberService {
         Optional<Member> byMember=memberRepository.findByUserID(memberDTO.getUserID());
         if(byMember.isPresent()){
             Member member = byMember.get();
-            member.setResetPassword(temporaryPassword);
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String temp = passwordEncoder.encode(temporaryPassword);
+            member.setResetPassword(temp);
+
         }
     }
 }

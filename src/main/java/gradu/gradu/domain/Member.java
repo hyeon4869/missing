@@ -31,12 +31,12 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Board>  boards = new ArrayList<>();
 
-    public void setUserPassID(MemberDTO memberDTO) {
-        this.userPassID= memberDTO.getPwd3();
+    public void setUserPassID(String newPassword) {
+        this.userPassID= newPassword;
     }
 
-    public void setResetPassword(String temporaryPassword){
-        this.userPassID = temporaryPassword;
+    public void setResetPassword(String temp){
+        this.userPassID = temp;
     }
 
 
